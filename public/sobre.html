@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="/public/images/favicon.ico" type="image/x-icon">
+    <title>Sobre - ChatRPG</title>
+</head>
+<body class="bg-gray-900 text-white h-fill">
+    <!-- Cabeçalho -->
+    <!-- Cabeçalho -->
+    <header class="bg-gray-800 text-white shadow-md fixed w-full top-0 left-0 z-50">
+        <div class="container mx-auto flex items-center justify-between p-2">
+            <div class="flex items-center">
+                <img src="https://your-frontend.com/static/icon.png" alt="ChatBOT Icon" class="w-10 h-10 rounded-full">
+                <h1 class="ml-3 text-xl font-semibold hidden md:block">ChatRPG</h1> <!-- Oculta no mobile -->
+            </div>
+            <nav class="flex space-x-4">
+                <a href="{{ url_for('main') }}" class="hover:text-blue-400">Home</a>
+                <a href="{{ url_for('about') }}" class="hover:text-blue-400">Sobre</a>
+            </nav>
+            <div class="flex items-center space-x-2">
+                {% if session['username'] %}
+                    <span class="mr-4 text-sm">Olá, {{ session['username'] }}!</span>
+                    <a href="{{ url_for('logout') }}" class="p-2 bg-gray-700 text-white rounded-full hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>    
+    <!-- Conteúdo Principal -->
+    <main class="pt-16">
+        <div class="container mx-auto px-4 py-8">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-gray-800 shadow-md rounded-lg p-6 mb-8">
+                    <h1 class="text-3xl font-bold mb-4 text-center">Sobre o ChatRPG</h1>
+                    <p class="text-lg mb-4">
+                        O ChatRPG foi criado com a intenção de fornecer uma ferramenta interativa para entusiastas de RPG de mesa. 
+                        A ideia surgiu a partir da necessidade de um assistente que pudesse ajudar jogadores e mestres a gerenciar suas 
+                        campanhas de maneira mais eficiente e divertida. 
+                    </p>
+                    <p class="text-lg">
+                        A plataforma visa facilitar a comunicação e a organização dos jogos, trazendo funcionalidades que enriquecem 
+                        a experiência de jogo e promovem uma melhor interação entre os participantes.
+                    </p>
+                </div>
+                <div class="bg-gray-800 shadow-md rounded-lg p-6">
+                    <h2 class="text-2xl font-bold mb-4 text-center">Sobre Mim</h2>
+                    <p class="text-lg">
+                        Sou um apaixonado por tecnologia e RPGs, e combinei essas duas paixões para criar o ChatRPG. 
+                        Com experiência em desenvolvimento de software e uma forte afinidade com jogos de mesa, 
+                        busquei criar uma ferramenta que pudesse beneficiar a comunidade de RPG e facilitar a administração 
+                        dos jogos para todos os envolvidos.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-gray-800 text-white w-full bottom-0 absolute">
+        <div class="mx-auto flex items-center justify-end">
+            <p class="text-sm flex items-center">
+                Criado por 
+                <a href="https://github.com/tiago-gl" class="ml-2 text-blue-400 hover:text-blue-500 flex items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub Icon" class="w-5 h-5 mr-1">
+                    Tiago Gomes
+                </a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

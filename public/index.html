@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="icon" href="/public/images/favicon.ico" type="image/x-icon">
+    <title>ChatRPG - RPG Assistente</title>
+    <!-- Adicionar FontAwesome para os ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .chat-bubble {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 12px;
+            word-break: break-word;
+            max-width: 80%;
+            min-width: 50px;
+            overflow-wrap: break-word;
+        }
+        .user-bubble {
+            background-color: #4b5563; /* bg-gray-600 */
+            text-align: right;
+        }
+        .assistant-bubble {
+            background-color: #374151; /* bg-gray-700 */
+        }
+        .message {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        .message.assistant .chat-bubble {
+            margin-left: 10px;
+        }
+        .message.user {
+            justify-content: flex-end;
+        }
+        .message.user .chat-bubble {
+            margin-right: 10px;
+        }
+        .message img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+        p {
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <!-- Cabeçalho -->
+    <header class="bg-gray-800 text-white shadow-md fixed w-full top-0 left-0 z-50">
+        <div class="container mx-auto flex items-center justify-between p-2">
+            <div class="flex items-center">
+                <img src="/public/images/icon.png" alt="ChatBOT Icon" class="w-10 h-10 rounded-full">
+                <h1 class="ml-3 text-xl font-semibold hidden md:block">ChatRPG</h1>
+            </div>
+            <nav class="flex space-x-4">
+                <a href="https://chatbot-mu-lemon.vercel.app/main" class="hover:text-blue-400">Home</a>
+                <a href="https://chatbot-mu-lemon.vercel.app/about" class="hover:text-blue-400">Sobre</a>
+            </nav>
+            <div class="flex items-center space-x-2">
+                {% if session['username'] %}
+                    <span class="mr-4 text-sm">Olá, {{ session['username'] }}!</span>
+                    <a href="https://chatbot-mu-lemon.vercel.app/logout" class="p-2 bg-gray-700 text-white rounded-full hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                {% else %}
+                    <a href="https://chatbot-mu-lemon.vercel.app/login" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    <!-- Conteúdo Principal -->
+    <main class="pt-16 flex flex-col min-h-screen">
+        <div class="container mx-auto p-4 flex-1">
+            <div id="chat-history" class="h-96 overflow-y-auto bg-gray-800 p-4 rounded-lg border border-gray-700 mb-4">
+                {% for message in messages %}
+                    <div class="message {% if message.username == session['username'] %}user{% else %}assistant{% endif %}">
+                        {% if message.username == session['username'] %}
+                            <div class="chat-bubble user-bubble">{{ message.message }}</div>
+                            <img src="https://www.gravatar.com/avatar?d=mp&s=200" alt="User Profile">
+                        {% else %}
+                            <img src="https://cdn-icons-png.flaticon.com/512/6654/6654545.png" alt="ChatBOT Icon">
+                            <div class="chat-bubble assistant-bubble">{{ message.message }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <form id="input-form" class="flex mb-2">
+                <input type="text" id="user-input" placeholder="Digite sua mensagem..." class="flex-1 p-2 border border-gray-700 rounded-l-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="button" id="send-button" class="px-4 py-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Enviar</button>
+            </form>
+        </div>
+    </main>
+    <footer class="bg-gray-800 text-white w-fill bottom-0 absolute">
+        <div class=" flex items-center w-[100vh-70%]">
+            <button id="clear-chat" class="flex justify-start ml-2 p-2 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+            <p class="text-sm flex items-center justify-end">
+                Criado por 
+                <a href="https://github.com/tiago-gl" class="ml-2 text-blue-400 hover:text-blue-500 flex items-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub Icon" class="w-5 h-5 mr-1">
+                    Tiago Gomes
+                </a>
+            </p>
+        </div>
+    </footer>
+    <script>
+        // Defina a URL base do seu backend
+        const backendUrl = 'https://chatbot-mu-lemon.vercel.app';  // Substitua pela URL real do seu backend
+
+        function formatText(text) {
+            text = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // **texto** para <strong>texto</strong>
+                .replace(/\*(.*?)\*/g, '<em>$1</em>'); // *texto* para <em>texto</em>
+            
+            text = text
+                .replace(/^\*\s(.*)$/gm, '<li>$1</li>')
+                .replace(/^\d+\.\s(.*)$/gm, '<li>$1</li>')
+                .replace(/<\/li>\s*<\/li>/g, '</li><li>')
+                .replace(/<\/li>\s*<\/ul>/g, '</li></ul>');
+
+            text = text
+                .replace(/\n\n+/g, '</p><p>')
+                .replace(/^/, '<p>')
+                .replace(/$/, '</p>');
+
+            text = text
+                .replace(/(<li>.*<\/li>)+/g, '<ul>$&</ul>')
+                .replace(/(<li>.*<\/li>)+/g, '<ol>$&</ol>');
+
+            return text;
+        }
+
+        document.getElementById('send-button').addEventListener('click', sendMessage);
+        document.getElementById('user-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const userInput = document.getElementById('user-input').value;
+            const chatHistory = document.getElementById('chat-history');
+
+            if (userInput.trim() === '') return;
+
+            chatHistory.innerHTML += `
+                <div class="message user">
+                    <div class="chat-bubble user-bubble">${formatText(userInput)}</div>
+                    <img src="https://www.gravatar.com/avatar?d=mp&s=200" alt="User Profile">
+                </div>
+            `;
+            document.getElementById('user-input').value = '';
+
+            fetch(`${backendUrl}/ask`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `user_input=${encodeURIComponent(userInput)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                chatHistory.innerHTML += `
+                    <div class="message assistant">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6654/6654545.png" alt="ChatBOT Icon">
+                        <div class="chat-bubble assistant-bubble">${formatText(data.response)}</div>
+                    </div>
+                `;
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            })
+            .catch(error => {
+                chatHistory.innerHTML += `
+                    <div class="message assistant">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6654/6654545.png" alt="ChatBOT Icon">
+                        <div class="chat-bubble bg-red-600">${formatText('Erro: ' + error.message)}</div>
+                    </div>
+                `;
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            });
+        }
+
+        document.getElementById('clear-chat').addEventListener('click', function() {
+            fetch(`${backendUrl}/clear`, { method: 'POST' })
+            .then(response => response.json())
+            .then(() => {
+                document.getElementById('chat-history').innerHTML = '';
+            });
+        });
+
+        function enviarBoasVindas() {
+            const chatHistory = document.getElementById('chat-history');
+            chatHistory.innerHTML += `
+                <div class="message assistant">
+                    <img src="https://cdn-icons-png.flaticon.com/512/6654/6654545.png" alt="ChatBOT Icon">
+                    <div class="chat-bubble assistant-bubble">${formatText('Bem-vindo ao ChatRPG, faça suas perguntas e role seu dado!')}</div>
+                </div>
+            `;
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        window.onload = enviarBoasVindas;
+
+        document.getElementById('login-button').addEventListener('click', function() {
+            this.textContent = 'Perfil';
+            this.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+            this.classList.add('bg-gray-700', 'hover:bg-gray-800');
+        });
+    </script>
+</body>
+</html>

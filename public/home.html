@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bem-vindo ao ChatRPG</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-900 text-white font-sans h-fill">
+        <div class="flex h-screen">
+            <!-- Imagem Lateral -->
+            <div class="w-1/2 flex items-center justify-center bg-gray-800">
+                <img src="{{ url_for('static', filename='map.jpg') }}" alt="Mesa com Mapa e D20" class="object-cover w-full h-full rounded-l-lg shadow-lg">
+            </div>
+
+            <!-- Conteúdo e Botões -->
+            <div class="w-1/2 flex flex-col items-center justify-center p-8 bg-gray-900 bg-opacity-80">
+                <img src="https://cdn-icons-png.flaticon.com/512/6654/6654545.png" alt="ChatBOT Icon" class="w-20 h-20 mb-6 rounded-full border border-blue-500 shadow-lg">
+
+                <h1 class="text-5xl font-extrabold mb-4 text-center text-blue-400">Bem-vindo ao ChatRPG</h1>
+
+                <p class="mb-8 text-lg text-center text-gray-300">
+                    Explore o mundo dos RPGs de mesa e faça suas perguntas ao nosso assistente especializado.
+                </p>
+
+                <h3 class="mb-4 text-sm text-center text-gray-500">
+                    Realize o login ou cadastre-se para utilizar!
+                </h3>
+
+                <div class="flex space-x-4">
+                    <a href="{{ url_for('login') }}" class="flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Login
+                    </a>
+                    <a href="{{ url_for('register') }}" class="flex items-center px-6 py-3 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        Registrar
+                    </a>
+                </div>
+            </div>
+        </div>
+        <footer class="bg-gray-800 text-white w-fill bottom-0 absolute">
+            <div class="mx-auto flex items-center justify-end">
+                <p class="text-sm flex items-center">
+                    Criado por 
+                    <a href="https://github.com/tiago-gl" class="ml-2 text-blue-400 hover:text-blue-500 flex items-center">
+                        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub Icon" class="w-5 h-5 mr-1">
+                        Tiago Gomes
+                    </a>
+                </p>
+            </div>
+        </footer>
+    </body>
+</html>
