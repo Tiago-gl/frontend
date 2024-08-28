@@ -1,3 +1,4 @@
+<!-- register.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -26,10 +27,10 @@
             </div>
         </div>
     </header>
-    <div class="flex flex-col items-center justify-center flex-1">
+    <div class="flex flex-col items-center justify-center flex-1 mt-16"> <!-- Espaço para o header -->
         <div class="w-full max-w-xs">
-            <!-- Adicione a URL completa do backend -->
-            <form action="https://chatbot-mu-lemon.vercel.app/register" method="POST" class="bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <!-- Substitua a URL pela rota correta do backend -->
+            <form action="/register" method="POST" class="bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <h2 class="text-2xl font-bold mb-6 text-center">Registrar-se</h2>
                 <!-- Mensagens de erro -->
                 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -53,13 +54,13 @@
                 </div>
                 <div class="flex items-center justify-between">
                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Registrar-se</button>
-                    <a href="https://seu-frontend.com/login" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">Voltar ao Login</a>
+                    <a href="/login" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">Voltar ao Login</a>
                 </div>
             </form>
         </div>
     </div>
     <footer class="bg-gray-800 text-white py-1">
-        <div class="mx-auto flex items-center justify-end">
+        <div class="container mx-auto flex items-center justify-end">
             <p class="text-sm flex items-center">
                 Criado por 
                 <a href="https://github.com/tiago-gl" class="ml-2 text-blue-400 hover:text-blue-500 flex items-center">
