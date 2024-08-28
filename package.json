@@ -2,7 +2,8 @@
   "name": "my-flask-app",
   "version": "1.0.0",
   "scripts": {
-    "build": "npx tailwindcss -o ./public/css/style.css"
+    "build": "npx tailwindcss -o ./public/css/style.css",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "tailwindcss": "^3.0.0"
